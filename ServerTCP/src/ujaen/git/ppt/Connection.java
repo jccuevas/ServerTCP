@@ -48,10 +48,12 @@ public class Connection implements Runnable {
 							}
 							break;
 						case 1:
+							outputData = "OK ";
+							// Si el formato es correcto
+							estado++;
 							break;
 
-						case 2:
-
+						case 2:	
 							if (comando.length() == 4) {
 								if (comando.equalsIgnoreCase("POWR")) {
 
