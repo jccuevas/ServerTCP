@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.SocketException;
 
-
 public class Connection implements Runnable {
 
 	Socket mSocket;
@@ -32,20 +31,20 @@ public class Connection implements Runnable {
 
 				while ((inputData = input.readLine()) != null) {
 					System.out.println("Servidor [Recibido]> " + inputData);
-					String campos[] = inputData.split(" ");
+					// String campos[] = inputData.split(" ");
 
-					if (campos.length == 2) {
-						String comando = campos[0];
-						String parametro = campos[1];
+					SMTPMensaje comando = RFC5621.analizaComando(inputData);
 
+					if (comando.getTipo() != -1) {
 						switch (estado) {
 
 						case 0:
-							if (comando.equalsIgnoreCase("USER")) {
-								outputData = "OK ";
+							if (comando.getTipo() == RFC5621.COMANDO_HELO) {
+								outputData = "220 ";
 								// Si el formato es correcto
 								estado++;
 							}
+
 							break;
 						case 1:
 							outputData = "OK ";
@@ -53,24 +52,24 @@ public class Connection implements Runnable {
 							estado++;
 							break;
 
-						case 2:	
-							if (comando.length() == 4) {
-								if (comando.equalsIgnoreCase("POWR")) {
-
-									try {
-										String power = String
-												.valueOf(Integer.parseInt(parametro) * Integer.parseInt(parametro));
-										outputData = "OK " + parametro + " EL CUADRADO = " + power + "\r\n";
-
-									} catch (NumberFormatException ex) {
-										outputData = "ERROR FORMATO DE NUMERO INCORRECTO\r\n";
-									}
-								} else
-
-									outputData = "OK [" + comando + "] " + " PARAMETRO= " + parametro + "\r\n";
-
-							} else
-								outputData = "ERROR COMANDO DESCONOCIDO\r\n";
+						case 2:
+//							if (comando.length() == 4) {
+//								if (comando.equalsIgnoreCase("POWR")) {
+//
+//									try {
+//										String power = String
+//												.valueOf(Integer.parseInt(parametro) * Integer.parseInt(parametro));
+//										outputData = "OK " + parametro + " EL CUADRADO = " + power + "\r\n";
+//
+//									} catch (NumberFormatException ex) {
+//										outputData = "ERROR FORMATO DE NUMERO INCORRECTO\r\n";
+//									}
+//								} else
+//
+//									outputData = "OK [" + comando + "] " + " PARAMETRO= " + parametro + "\r\n";
+//
+//							} else
+//								outputData = "ERROR COMANDO DESCONOCIDO\r\n";
 							break;
 						}
 					} else
