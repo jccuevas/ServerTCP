@@ -15,14 +15,16 @@ public class Server {
 		try {
 			server = new ServerSocket(TCP_SERVICE_PORT);
 			while (true) {
-				if (first) {
-					new Client("localhost", TCP_SERVICE_PORT);
-					first = false;
-				}
+				//Clase cliente para probar DataOutputStream y DataInputStream
+				//Cambiar en la hebra Connection por ConnectionInf
+//				if (first) {
+//					new Client("localhost", TCP_SERVICE_PORT);
+//					first = false;
+//				}
 				final Socket newsocket = server.accept();
 				System.out.println("Servidor> Conexión entrante desde " + newsocket.getInetAddress().toString() + ":"
 						+ newsocket.getPort());
-				new Thread(new ConnectionInf(newsocket)).start();
+				new Thread(new Connection(newsocket)).start();
 			}
 		} catch (IOException e) {
 			System.err.println("Server " + e.getMessage());
